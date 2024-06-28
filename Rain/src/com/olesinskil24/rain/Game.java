@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 
 import com.olesinskil24.rain.graphics.Screen;
 import com.olesinskil24.rain.input.Keyboard;
+import com.olesinskil24.rain.level.Level;
+import com.olesinskil24.rain.level.RandomLevel;
 
 public class Game extends Canvas implements Runnable {
 	// What is this for??????
@@ -25,12 +27,10 @@ public class Game extends Canvas implements Runnable {
 	
 	//computer process
 	private Thread thread;
-	
 	//interactable window
 	private JFrame frame;
-	
 	private Keyboard key;
-	
+	private Level level;
 	private boolean running = false;
 	
 	//reference to screen class
@@ -38,7 +38,6 @@ public class Game extends Canvas implements Runnable {
 	
 	//creating an image
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	
 	//creating a way to access the image
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	
@@ -48,10 +47,10 @@ public class Game extends Canvas implements Runnable {
 		setPreferredSize(size);
 		
 		screen = new Screen(width, height);
-		
 		frame = new JFrame();
-		
 		key = new Keyboard();
+		
+		level = new RandomLevel(64, 64);
 		
 		addKeyListener(key);
 		
@@ -126,7 +125,8 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		screen.render(x, y);
+		level.render(x, y, screen);
+//		screen.render(x, y);
 		
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
